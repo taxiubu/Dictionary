@@ -50,18 +50,18 @@
                     android:textStyle="bold"
                     android:textSize="@dimen/_20sdp"
                     android:textColor="@color/colorWhite"
-                    android:text="English"
+                    android:text="Tiếng anh"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginRight="@dimen/_30sdp"
-                    android:id="@+id/tvEnglish"
+                    android:id="@+id/tvVietnamese"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
-                    android:id="@+id/tvVietnamese"
+                    android:id="@+id/tvEnglish"
                     android:textColor="@color/colorWhite"
-                    android:text="tiếng anh"
+                    android:text="English"
                     android:layout_margin="@dimen/_10sdp"
-                    android:layout_below="@id/tvEnglish"
+                    android:layout_below="@id/tvVietnamese"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <ImageView
@@ -76,32 +76,26 @@
         <RelativeLayout
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_below="@id/layoutRandomWord"
-            android:id="@+id/layoutHistory"
+            android:id="@+id/layoutButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/tvHistory"
+            <Button
+                android:background="@drawable/background_bt_history"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/btHistory"
                 android:textColor="@color/colorBlack"
-                android:textSize="@dimen/_15sdp"
                 android:text="@string/history"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/_220sdp"
                 android:layout_height="wrap_content"/>
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_below="@id/tvHistory"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:id="@+id/rcvHistory"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_100sdp"/>
             <Button
                 android:textColor="@color/colorWhite"
                 android:background="@drawable/background_random_words"
                 android:text="@string/transV_A"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@id/rcvHistory"
+                android:layout_below="@id/btHistory"
                 android:id="@+id/changeTranslator"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/_220sdp"
                 android:layout_height="wrap_content"/>
             <Button
                 android:textColor="@color/colorWhite"
@@ -111,12 +105,17 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/changeTranslator"
                 android:id="@+id/TranslatorToEngLish"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/_220sdp"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcvSearch"
             android:layout_below="@id/toolBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_below="@id/toolBar"
+            android:id="@+id/rcvHistory"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </RelativeLayout>

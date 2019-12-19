@@ -29,7 +29,7 @@ public class ShowLogo extends Activity {
     SQLHelper sqlHelper;
     List<Dictionary> dictionaryList;
     // Set Time Waitting
-    private final int TimeWait = 5000;
+    private final int TimeWait = 3000;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -45,7 +45,6 @@ public class ShowLogo extends Activity {
         else {
             binding.layoutLoad.setVisibility(View.VISIBLE);
             new LoadData().execute(Define.LINK_API);
-
             startAct(TimeWait);
         }*/
         startAct(TimeWait);

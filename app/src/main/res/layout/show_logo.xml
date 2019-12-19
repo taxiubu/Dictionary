@@ -13,17 +13,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ProgressBar
+                android:layout_marginBottom="@dimen/_20sdp"
                 android:layout_gravity="center"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"/>
-            <TextView
-                android:textSize="@dimen/_20sdp"
-                android:layout_gravity="center"
-                android:layout_alignParentBottom="true"
-                android:textColor="@color/colorWhite"
-                android:text="Đang giải nén dữ liệu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
         </LinearLayout>
     </RelativeLayout>
 </layout>

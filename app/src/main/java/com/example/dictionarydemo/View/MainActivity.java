@@ -1,6 +1,7 @@
 package com.example.dictionarydemo.View;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -29,6 +30,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -39,20 +41,20 @@ public class MainActivity extends AppCompatActivity {
     SQLHelper sqlHelper;
     AdapterSearch adapter;
     int size;
-    boolean changeTranslator= true;
+    boolean changeTranslator= false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         binding= DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        /*dictionary = new ArrayList<>();
-        sqlHelper= new SQLHelper(getBaseContext());
-        dictionary = sqlHelper.getAllDictionary();*/
+        //loadData
         readData2();
         size= dictionary.size();
 
+        //hide keyboard
         binding.etSearch.setInputType(InputType.TYPE_NULL);
+
         editText();
         randomWords();
         setChangeTranslator();
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
 
         binding.etSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -126,8 +129,6 @@ public class MainActivity extends AppCompatActivity {
             filterList.add(new Dictionary("trống", "trống"));
         adapter.filterList(filterList);
     }
-
-    //////////////////////////////////////////
     private void editText(){
         binding.etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -157,11 +158,11 @@ public class MainActivity extends AppCompatActivity {
     }
     void hideViewHome(){
         binding.layoutRandomWord.setVisibility(View.INVISIBLE);
-        binding.layoutHistory.setVisibility(View.INVISIBLE);
+        binding.layoutButton.setVisibility(View.INVISIBLE);
     }
     void showViewHome(){
         binding.layoutRandomWord.setVisibility(View.VISIBLE);
-        binding.layoutHistory.setVisibility(View.VISIBLE);
+        binding.layoutButton.setVisibility(View.VISIBLE);
     }
     void buildRcv(){
         binding.rcvSearch.setVisibility(View.VISIBLE);
@@ -173,16 +174,21 @@ public class MainActivity extends AppCompatActivity {
         adapter.setOnClickWord(new IOnClickWord() {
             @Override
             public void onClick(Dictionary in4Word) {
-                if (changeTranslator==true) {
+                Intent translator= new Intent(getBaseContext(), TranslatorActivity.class);
+                translator.putExtra("vietnamese", in4Word.getVietnamese());
+                translator.putExtra("english", in4Word.getEnglish());
+                translator.putExtra("checkTranslator", (Boolean)changeTranslator);
+
+                startActivity(translator);
+                overridePendingTransition(R.anim.anim_enter, R.anim.anim_exit);
+                /*if (changeTranslator==true) {
                     Toast.makeText(getBaseContext(), in4Word.getVietnamese(), Toast.LENGTH_LONG).show();
                 }else {
                     Toast.makeText(getBaseContext(), in4Word.getEnglish(), Toast.LENGTH_LONG).show();
-                }
+                }*/
             }
         });
     }
-
-
     void setChangeTranslator(){
         binding.changeTranslator.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,7 +207,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     public void readData2()
     {
         dictionary= new ArrayList<>();
@@ -220,13 +225,10 @@ public class MainActivity extends AppCompatActivity {
                     if(indexToCut!=-1){
                         String vietnamese= data.substring(0, indexToCut);
                         String english= data.substring(indexToCut+2);
-                        //stringList.add(data);
                         dictionary.add(new Dictionary(vietnamese, english));
                     }
                 }
                 in.close();
-                //Toast.makeText(getBaseContext(), String.valueOf(dictionary.size()), Toast.LENGTH_LONG).show();
-                //tv.setText(stringList.get(50000));
             }
             catch(IOException ex){
                 Log.e("ERROR", ex.getMessage());
