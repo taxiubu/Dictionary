@@ -1,16 +1,20 @@
 package com.example.dictionarydemo.View;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +34,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     List<Dictionary> dictionary;
     SQLHelper sqlHelper;
     AdapterSearch adapter;
+    boolean doubleBackToExitPressedOnce = false;
     int size;
     boolean changeTranslator= false;
     @Override
@@ -51,9 +55,6 @@ public class MainActivity extends AppCompatActivity {
         //loadData
         readData2();
         size= dictionary.size();
-
-        //hide keyboard
-        binding.etSearch.setInputType(InputType.TYPE_NULL);
 
         editText();
         randomWords();
@@ -79,8 +80,6 @@ public class MainActivity extends AppCompatActivity {
                 binding.btCancel.setVisibility(View.INVISIBLE);
                 binding.rcvSearch.setVisibility(View.INVISIBLE);
                 binding.etSearch.setText("");
-
-               // binding.etSearch.setInputType(InputType.TYPE_NULL);
 
             }
         });
@@ -155,6 +154,13 @@ public class MainActivity extends AppCompatActivity {
                 binding.tvVietnamese.setText(dictionary.get(index[0]).getVietnamese());
             }
         });
+        binding.layoutRandomWord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intentActivity(dictionary.get(index[0]).getVietnamese(),
+                        dictionary.get(index[0]).getEnglish(), changeTranslator);
+            }
+        });
     }
     void hideViewHome(){
         binding.layoutRandomWord.setVisibility(View.INVISIBLE);
@@ -174,18 +180,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.setOnClickWord(new IOnClickWord() {
             @Override
             public void onClick(Dictionary in4Word) {
-                Intent translator= new Intent(getBaseContext(), TranslatorActivity.class);
-                translator.putExtra("vietnamese", in4Word.getVietnamese());
-                translator.putExtra("english", in4Word.getEnglish());
-                translator.putExtra("checkTranslator", (Boolean)changeTranslator);
-
-                startActivity(translator);
-                overridePendingTransition(R.anim.anim_enter, R.anim.anim_exit);
-                /*if (changeTranslator==true) {
-                    Toast.makeText(getBaseContext(), in4Word.getVietnamese(), Toast.LENGTH_LONG).show();
-                }else {
-                    Toast.makeText(getBaseContext(), in4Word.getEnglish(), Toast.LENGTH_LONG).show();
-                }*/
+                intentActivity(in4Word.getVietnamese(), in4Word.getEnglish(), changeTranslator);
             }
         });
     }
@@ -235,5 +230,61 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+    void intentActivity(String vietnamese, String english, Boolean check){
+        Intent translator= new Intent(getBaseContext(), TranslatorActivity.class);
+        translator.putExtra("vietnamese", vietnamese);
+        translator.putExtra("english", english);
+        translator.putExtra("checkTranslator", check);
+
+        startActivity(translator);
+        overridePendingTransition(R.anim.anim_enter, R.anim.anim_exit);
+    }
+
+    // ẩn bàn phím khi click ra ngoài edittext
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        View v = getCurrentFocus();
+
+        if (v != null &&
+                (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE) &&
+                v instanceof EditText &&
+                !v.getClass().getName().startsWith("android.webkit.")) {
+            int scrcoords[] = new int[2];
+            v.getLocationOnScreen(scrcoords);
+            float x = ev.getRawX() + v.getLeft() - scrcoords[0];
+            float y = ev.getRawY() + v.getTop() - scrcoords[1];
+
+            if (x < v.getLeft() || x > v.getRight() || y < v.getTop() || y > v.getBottom()){
+                hideKeyboard(this);
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+    public static void hideKeyboard(Activity activity) {
+        if (activity != null && activity.getWindow() != null && activity.getWindow().getDecorView() != null) {
+            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
+
+        }
+    }
+    // ấn 2 lần trong 2s để thoát :v
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, R.string.mess, Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 }

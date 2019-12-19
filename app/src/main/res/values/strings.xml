@@ -4,4 +4,5 @@
     <string name="history">Từ tìm kiếm gần đây</string>
     <string name="transV_A">Dịch từ tiếng Việt sang tiếng Anh</string>
     <string name="transA_V">Dịch từ tiếng Anh sang tiếng Việt</string>
+    <string name="mess">Ấn lần nữa để thoát</string>
 </resources>

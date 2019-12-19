@@ -5,23 +5,16 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
 
-import com.example.dictionarydemo.Define;
 import com.example.dictionarydemo.Model.Dictionary;
 import com.example.dictionarydemo.Model.HTTPData;
 import com.example.dictionarydemo.R;
 import com.example.dictionarydemo.SQLHelper;
 import com.example.dictionarydemo.databinding.ShowLogoBinding;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ShowLogo extends Activity {

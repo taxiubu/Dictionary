@@ -85,7 +85,7 @@
                 android:id="@+id/btHistory"
                 android:textColor="@color/colorBlack"
                 android:text="@string/history"
-                android:layout_width="@dimen/_220sdp"
+                android:layout_width="@dimen/_240sdp"
                 android:layout_height="wrap_content"/>
             <Button
                 android:textColor="@color/colorWhite"
@@ -95,7 +95,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/btHistory"
                 android:id="@+id/changeTranslator"
-                android:layout_width="@dimen/_220sdp"
+                android:layout_width="@dimen/_240sdp"
                 android:layout_height="wrap_content"/>
             <Button
                 android:textColor="@color/colorWhite"
@@ -105,7 +105,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/changeTranslator"
                 android:id="@+id/TranslatorToEngLish"
-                android:layout_width="@dimen/_220sdp"
+                android:layout_width="@dimen/_240sdp"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
         <androidx.recyclerview.widget.RecyclerView
