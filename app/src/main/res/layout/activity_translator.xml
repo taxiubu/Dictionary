@@ -18,6 +18,13 @@
                 android:id="@+id/btBack"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"/>
+            <TextView
+                android:layout_centerInParent="true"
+                android:textSize="@dimen/_20sdp"
+                android:textColor="@color/colorWhite"
+                android:text="Dịch nghĩa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </RelativeLayout>
         <TextView
             android:textStyle="bold"

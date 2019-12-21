@@ -60,6 +60,10 @@ public class SQLHelper extends SQLiteOpenHelper {
         }
         return dictionaryList;
     }
+    public int deleteItemSave(String vietnamese){
+        sqLiteDatabase= getWritableDatabase();
+        return sqLiteDatabase.delete(DB_NAME_TABLE, "vietnamese=?", new String[]{vietnamese});
+    }
     private void closeDB() {
         if (sqLiteDatabase != null) sqLiteDatabase.close();
         if (contentValues != null) contentValues.clear();

@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         readData2();
         size= dictionary.size();
         binding.etSearch.setInputType(InputType.TYPE_NULL);
+        sqlHelper= new SQLHelper(getBaseContext());
         editText();
         randomWords();
         setChangeTranslator();
@@ -107,6 +108,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        binding.btHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(getBaseContext(), HistoryActivity.class);
+                intent.putExtra("check", changeTranslator);
+                startActivity(intent);
+            }
+        });
     }
 ///////////////////////////////////// gợi ý từ ............ ----->xong
     private void filter(String text){
@@ -126,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
         if(filterList.size()==0)
-            filterList.add(new Dictionary("trống", "trống"));
+            filterList.add(new Dictionary("", ""));
         adapter.filterList(filterList);
     }
     private void editText(){
@@ -135,7 +144,30 @@ public class MainActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH){
                     binding.etSearch.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                    Toast.makeText(getBaseContext(),binding.etSearch.getText().toString(),Toast.LENGTH_LONG).show();
+                    String str= binding.etSearch.getText().toString().toLowerCase();
+                    Boolean check= false;
+                    Dictionary WordIntent = null;
+                    if(changeTranslator==false){
+                        for (Dictionary word:dictionary){
+                            if(word.getVietnamese().toLowerCase().trim().equals(str)){
+                                check=true;
+                                WordIntent= word;
+                            }
+                        }
+
+                    }
+                    else{
+                        for (Dictionary word:dictionary){
+                            if(word.getEnglish().toLowerCase().trim().equals(str)){
+                                check=true;
+                                WordIntent= word;
+                            }
+                        }
+                    }
+                    if(check==true)
+                        intentActivity(WordIntent.getVietnamese(), WordIntent.getEnglish(), changeTranslator);
+                    else
+                        Toast.makeText(getBaseContext(), "Không có trong từ điển", Toast.LENGTH_LONG).show();
                     return true;
                 }
                 return false;
@@ -233,13 +265,22 @@ public class MainActivity extends AppCompatActivity {
 
     }
     void intentActivity(String vietnamese, String english, Boolean check){
-        Intent translator= new Intent(getBaseContext(), TranslatorActivity.class);
-        translator.putExtra("vietnamese", vietnamese);
-        translator.putExtra("english", english);
-        translator.putExtra("checkTranslator", check);
+        List<Dictionary>history= sqlHelper.getAllDictionary();
+        if(vietnamese.equals("")==false){
+            Intent translator= new Intent(getBaseContext(), TranslatorActivity.class);
+            translator.putExtra("vietnamese", vietnamese);
+            translator.putExtra("english", english);
+            translator.putExtra("checkTranslator", check);
 
-        startActivity(translator);
-        overridePendingTransition(R.anim.anim_enter, R.anim.anim_exit);
+            startActivity(translator);
+            overridePendingTransition(R.anim.anim_enter, R.anim.anim_exit);
+
+            for (Dictionary word:history){
+                if(vietnamese.equals(word.getVietnamese()))
+                    sqlHelper.deleteItemSave(vietnamese);
+            }
+            sqlHelper.insertWords(vietnamese, english);
+        }
     }
 
     // ẩn bàn phím khi click ra ngoài edittext
