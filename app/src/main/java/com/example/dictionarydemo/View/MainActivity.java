@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         //loadData
         readData2();
         size= dictionary.size();
-
+        binding.etSearch.setInputType(InputType.TYPE_NULL);
         editText();
         randomWords();
         setChangeTranslator();
@@ -80,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
                 binding.btCancel.setVisibility(View.INVISIBLE);
                 binding.rcvSearch.setVisibility(View.INVISIBLE);
                 binding.etSearch.setText("");
-
+                binding.etSearch.setInputType(InputType.TYPE_NULL);
+                hideKeyboard(MainActivity.this);
             }
         });
 
